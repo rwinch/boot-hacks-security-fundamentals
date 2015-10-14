@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.htmlunit.webdriver.MockMvcHtmlUnitDr
 import org.springframework.web.context.WebApplicationContext;
 
 import sample.pages.IndexPage;
+import sample.pages.LoginPage;
 import sample.pages.MessagePage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -51,5 +53,34 @@ public class ApplicationTests {
 		MessagePage message = MessagePage.to(driver, MessagePage.class);
 
 		assertThat(message.getMessage()).isEqualTo("Hello user!");
+	}
+
+	@WithAnonymousUser
+	@Test
+	public void messagePageRequiresLogin() {
+		LoginPage login = MessagePage.to(driver, LoginPage.class);
+
+		login.assertAt();
+	}
+
+	@WithAnonymousUser
+	@Test
+	public void failLogin() {
+		LoginPage login = MessagePage.to(driver, LoginPage.class);
+
+		login = login.login("invalid", "credentials", LoginPage.class);
+
+		login.assertAt();
+		login.assertError();
+	}
+
+	@WithAnonymousUser
+	@Test
+	public void successLogin() {
+		LoginPage login = MessagePage.to(driver, LoginPage.class);
+
+		MessagePage message = login.login("user", "password", MessagePage.class);
+
+		message.assertAt();
 	}
 }
