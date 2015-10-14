@@ -16,6 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.htmlunit.webdriver.MockMvcHtmlUnitDriverBuilder;
 import org.springframework.web.context.WebApplicationContext;
 
+import sample.pages.AdminPage;
 import sample.pages.IndexPage;
 import sample.pages.LoginPage;
 import sample.pages.MessagePage;
@@ -82,5 +83,13 @@ public class ApplicationTests {
 		MessagePage message = login.login("rob@example.com", "password", MessagePage.class);
 
 		message.assertAt();
+	}
+
+	@WithMockUser(roles="ADMIN")
+	@Test
+	public void adminAllowsAdmin() {
+		AdminPage admin = AdminPage.to(driver, AdminPage.class);
+
+		admin.assertAt();
 	}
 }

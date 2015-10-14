@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Admin Message</title>
+	</head>
+	<body>
+		<h1>Admin Message</h1>
+		<p id="message" th:text="${message}">Some Message</p>
+
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Log Out"/>
+		</form>
+	</body>
+</html>
