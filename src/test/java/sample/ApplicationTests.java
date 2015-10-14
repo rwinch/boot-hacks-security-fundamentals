@@ -1,5 +1,6 @@
 package sample;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Before;
@@ -8,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.htmlunit.webdriver.MockMvcHtmlUnitDriverBuilder;
@@ -19,6 +21,7 @@ import sample.pages.MessagePage;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@WithMockUser
 public class ApplicationTests {
 	@Autowired
 	WebApplicationContext wac;
@@ -28,7 +31,7 @@ public class ApplicationTests {
 	@Before
 	public void setup() {
 		driver = MockMvcHtmlUnitDriverBuilder
-				.webAppContextSetup(wac)
+				.webAppContextSetup(wac, springSecurity())
 				.build();
 	}
 
@@ -47,6 +50,6 @@ public class ApplicationTests {
 	public void messagePage() {
 		MessagePage message = MessagePage.to(driver, MessagePage.class);
 
-		assertThat(message.getMessage()).isEqualTo("Hello Boot!");
+		assertThat(message.getMessage()).isEqualTo("Hello user!");
 	}
 }
