@@ -5,5 +5,9 @@
 	<body>
 		<h1>Message</h1>
 		<p id="message" th:text="${message}">Some Message</p>
+
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Log Out"/>
+		</form>
 	</body>
 </html>
