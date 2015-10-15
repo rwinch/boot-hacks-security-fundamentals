@@ -79,7 +79,7 @@ public class ApplicationTests {
 	public void successLogin() {
 		LoginPage login = MessagePage.to(driver, LoginPage.class);
 
-		MessagePage message = login.login("user", "password", MessagePage.class);
+		MessagePage message = login.login("rob@example.com", "password", MessagePage.class);
 
 		message.assertAt();
 	}
